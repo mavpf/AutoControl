@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">Auto Control</string>
+    <string name="maker_field">Fabricante:</string>
+    <string name="model_field">Modelo:</string>
+    <string name="color_field">Cor:</string>
+    <string name="year_field">Ano:</string>
+    <string name="mileage_field">Quilometragem:</string>
+    <string name="licenplace_field">Placa:</string>
+    <string name="cancel_button">Cancelar</string>
+    <string name="save_button">Salvar</string>
+    <string name="add_header">Adicionar Carro</string>
+    <string name="save_error">Placa em uso</string>
+    <string name="field_error">"Preenhca todos os campos"</string>
+</resources>

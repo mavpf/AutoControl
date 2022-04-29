@@ -1,4 +1,8 @@
 package br.dev.mavpf.autocontrol
 
-class AutoControl {
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+
+@HiltAndroidApp
+class AutoControlApplication: Application() {
 }
