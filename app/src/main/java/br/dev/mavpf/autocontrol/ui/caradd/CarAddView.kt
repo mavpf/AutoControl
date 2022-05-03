@@ -1,11 +1,8 @@
 package br.dev.mavpf.autocontrol.ui.caradd
 
-import android.database.sqlite.SQLiteException
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -14,39 +11,20 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.ActivityNavigatorExtras
-import androidx.navigation.NavHost
-import androidx.navigation.NavHostController
 import br.dev.mavpf.autocontrol.R
 import br.dev.mavpf.autocontrol.data.room.Cars
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.lang.Exception
 
 @Composable
-fun CarAddView(): MutableState<Boolean> {
+fun carAddView(): MutableState<Boolean> {
 
     val carAddViewModel = hiltViewModel<CarAddViewModel>()
 
@@ -54,7 +32,7 @@ fun CarAddView(): MutableState<Boolean> {
     val errorMessage = stringResource(id = R.string.save_error)
     val coroutineScope = rememberCoroutineScope()
     
-    var buttonReturn = remember { mutableStateOf(true) }
+    val buttonReturn = remember { mutableStateOf(true) }
 
     var textMaker by remember { mutableStateOf("") }
     var textModel by remember { mutableStateOf("") }
@@ -75,10 +53,10 @@ fun CarAddView(): MutableState<Boolean> {
             textLicenceplate.isBlank() -> {
                 false
             }
-            textMileage.isBlank() -> {
+            textModel.isBlank() -> {
                 false
             }
-            textModel.isBlank() || textMileage.toIntOrNull()?.let { false } ?: true -> {
+            textMileage.isBlank() || textMileage.toIntOrNull()?.let { false } ?: true -> {
                 false
             }
             textYear.isBlank() || textYear.toIntOrNull()?.let{false} ?: true -> {
@@ -150,7 +128,7 @@ fun CarAddView(): MutableState<Boolean> {
                     .padding(5.dp),
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                TextField(
+                OutlinedTextField(
                     value = textMaker,
                     onValueChange = {
                         textMaker = it
@@ -160,7 +138,7 @@ fun CarAddView(): MutableState<Boolean> {
                         .weight(1f)
                 )
 
-                TextField(
+                OutlinedTextField(
                     value = textModel,
                     onValueChange = {
                         textModel = it
@@ -176,7 +154,7 @@ fun CarAddView(): MutableState<Boolean> {
                     .padding(5.dp),
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                TextField(
+                OutlinedTextField(
                     value = textColor,
                     onValueChange = {
                         textColor = it
@@ -185,7 +163,7 @@ fun CarAddView(): MutableState<Boolean> {
                     modifier = Modifier
                         .weight(1f)
                 )
-                TextField(
+                OutlinedTextField(
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     value = textYear,
                     onValueChange = {
@@ -204,7 +182,7 @@ fun CarAddView(): MutableState<Boolean> {
                     .padding(5.dp),
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
             ) {
-                TextField(
+                OutlinedTextField(
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     value = textMileage,
                     onValueChange = {
@@ -217,7 +195,7 @@ fun CarAddView(): MutableState<Boolean> {
                     modifier = Modifier
                         .weight(1f)
                 )
-                TextField(
+                OutlinedTextField(
                     value = textLicenceplate,
                     onValueChange = {
                         textLicenceplate = it

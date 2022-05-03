@@ -14,4 +14,12 @@
     <string name="menu_gas">Combustíveis</string>
     <string name="menu_service">Serviços</string>
     <string name="gas_add_title">Combustíveis</string>
+    <string name="no_gas_type">Nenhum tipo de combustível adicionado</string>
+    <string name="gas_type">Combustivel:</string>
+    <string name="gas_octanes">Octanas:</string>
+    <string name="gas_obs">Observaçoes:</string>
+    <string name="gas_add_header">Adicionar Combustivel</string>
+    <string name="save_gas_error">Nome do combustivel e obrigatorio</string>
+    <string name="save_gasoctanes_error">Apenas valores numéricos nas octanas</string>
+    <string name="gas_name_used">Nome de combustivel em uso</string>
 </resources>

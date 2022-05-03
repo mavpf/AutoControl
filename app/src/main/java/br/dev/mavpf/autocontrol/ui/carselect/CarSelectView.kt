@@ -25,7 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import br.dev.mavpf.autocontrol.R
 import br.dev.mavpf.autocontrol.data.room.Cars
-import br.dev.mavpf.autocontrol.ui.caradd.CarAddView
+import br.dev.mavpf.autocontrol.ui.caradd.carAddView
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -114,7 +114,7 @@ fun CarSelectView(navRoutes: NavHostController) {
 
     if (openDialogState.value) {
         Dialog(onDismissRequest = { openDialogState.value = false }) {
-            openDialogState.value = CarAddView().value
+            openDialogState.value = carAddView().value
         }
     }
 }
