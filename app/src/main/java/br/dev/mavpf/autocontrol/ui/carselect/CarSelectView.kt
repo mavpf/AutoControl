@@ -8,28 +8,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.HomeRepairService
+import androidx.compose.material.icons.filled.LocalGasStation
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.dialog
 import br.dev.mavpf.autocontrol.R
 import br.dev.mavpf.autocontrol.data.room.Cars
-import br.dev.mavpf.autocontrol.routes.NavRoutes
 import br.dev.mavpf.autocontrol.ui.caradd.CarAddView
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalComposeUiApi::class)
@@ -40,16 +35,14 @@ fun CarSelectView(navRoutes: NavHostController) {
     val lazyPagingItems: List<Cars> by carSelectViewModel.getCars().observeAsState(listOf())
     val rememberState = rememberLazyListState()
 
-    var openDialogState = remember { mutableStateOf(false)}
+    val openDialogState = remember { mutableStateOf(false)}
 
     Column {
 
         TopAppBar(
             title = { Text(text = stringResource(id = R.string.app_name)) },
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
-                    Icon(Icons.Filled.Menu, null)
-                }
+               MenuOpen(navRoutes)
             }
         )
 
@@ -58,7 +51,7 @@ fun CarSelectView(navRoutes: NavHostController) {
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            items(items = lazyPagingItems) { it ->
+            items(items = lazyPagingItems) {
                 Card(
                     modifier = Modifier
                         .padding(5.dp)
@@ -122,6 +115,54 @@ fun CarSelectView(navRoutes: NavHostController) {
     if (openDialogState.value) {
         Dialog(onDismissRequest = { openDialogState.value = false }) {
             openDialogState.value = CarAddView().value
+        }
+    }
+}
+
+
+@Composable
+fun MenuOpen(navRoutes: NavHostController){
+
+    var expanded by remember {
+        mutableStateOf(false)
+    }
+
+    Box(
+        Modifier
+            .wrapContentSize(Alignment.TopEnd)
+    ) {
+        IconButton(onClick = {
+            expanded = true
+
+        }) {
+            Icon(
+                Icons.Filled.Menu,
+                null
+            )
+        }
+    }
+
+    DropdownMenu(expanded = expanded , onDismissRequest = { expanded = false }, Modifier.width(IntrinsicSize.Max)) {
+        DropdownMenuItem(onClick = { navRoutes.navigate("gasadd") }) {
+            Icon(
+                Icons.Filled.LocalGasStation,
+                null,
+                Modifier.weight(0.3f))
+            Text(text = stringResource(id = R.string.menu_gas),
+                Modifier
+                .weight(1f)
+                .padding(2.dp))
+        }
+        DropdownMenuItem(onClick = { /*TODO*/ }) {
+            Icon(
+                Icons.Filled.HomeRepairService,
+                null,
+                Modifier
+                    .weight(0.3f))
+            Text(text = stringResource(id = R.string.menu_service),
+                Modifier
+                    .weight(1f)
+                    .padding(2.dp))
         }
     }
 }

@@ -12,6 +12,7 @@ import br.dev.mavpf.autocontrol.routes.NavRoutes
 import br.dev.mavpf.autocontrol.ui.caradd.CarAddView
 import br.dev.mavpf.autocontrol.ui.cardetail.CarDetailView
 import br.dev.mavpf.autocontrol.ui.carselect.CarSelectView
+import br.dev.mavpf.autocontrol.ui.gasadd.GasAddView
 import br.dev.mavpf.autocontrol.ui.theme.AutoControlTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -42,6 +43,10 @@ class MainActivity : ComponentActivity() {
                             navBackStackEntry.arguments?.getString("licencePlate") ?: ""
                         )
                     }
+                    
+                    composable(
+                        "gasadd"
+                    ) { GasAddView(navRoutes = navController)}
 
                 }
             }

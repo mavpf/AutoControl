@@ -11,4 +11,7 @@
     <string name="add_header">Adicionar Carro</string>
     <string name="save_error">Placa em uso</string>
     <string name="field_error">"Preenhca todos os campos"</string>
+    <string name="menu_gas">Combustíveis</string>
+    <string name="menu_service">Serviços</string>
+    <string name="gas_add_title">Combustíveis</string>
 </resources>

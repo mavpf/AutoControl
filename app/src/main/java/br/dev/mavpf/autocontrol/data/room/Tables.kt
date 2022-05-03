@@ -15,3 +15,12 @@ data class Cars(
     @ColumnInfo(name = "year") val year: Int,
     @ColumnInfo(name = "mileage") val mileage: Int
 )
+
+@Entity(
+    tableName = "gastypes"
+)
+data class GasTypes(
+    @ColumnInfo (name = "gasname") @PrimaryKey val gasname: String,
+    @ColumnInfo (name = "octanes") val octanes: Int,
+    @ColumnInfo (name = "obs") val obs: String
+)
