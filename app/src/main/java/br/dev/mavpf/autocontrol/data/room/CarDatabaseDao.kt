@@ -19,4 +19,11 @@ interface CarDatabaseDao {
 
     @Query("select * from cars")
     fun selectCars(): LiveData<List<Cars>>
+
+    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Throws(SQLiteException::class)
+    suspend fun insertGas(vararg: GasTypes)
+
+    @Query("select* from gastypes")
+    fun selectGas(): LiveData<List<GasTypes>>
 }

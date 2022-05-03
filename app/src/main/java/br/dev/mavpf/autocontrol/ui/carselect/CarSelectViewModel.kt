@@ -11,7 +11,6 @@ import javax.inject.Inject
 class CarSelectViewModel @Inject constructor(
     private val provideCarDatabaseDao: CarDatabaseDao
 ): ViewModel() {
-    val teste = "VM SEL TESTE"
 
     fun getCars(): LiveData<List<Cars>> {
         return provideCarDatabaseDao.selectCars()

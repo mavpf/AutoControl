@@ -1,15 +1,38 @@
 package br.dev.mavpf.autocontrol.routes
 
-import androidx.navigation.NamedNavArgument
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
+import androidx.compose.runtime.Composable
+import androidx.navigation.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import br.dev.mavpf.autocontrol.ui.cardetail.CarDetailView
+import br.dev.mavpf.autocontrol.ui.carselect.CarSelectView
+import br.dev.mavpf.autocontrol.ui.gasdetail.GasDetailView
 
-sealed class NavRoutes (val routes: String) {
-    object CarSelect : NavRoutes("carselect")
-    object CarAdd: NavRoutes("caradd")
-    object CarDetail: NavRoutes("cardetail")
-    object FuelAdd: NavRoutes("fueladd/{licencePlate}")
-    object FuelConfig: NavRoutes("fuelconfig")
-    object ServiceAdd: NavRoutes("serviceadd/{licencePlate}")
-    object ServiceConfig: NavRoutes("serviceconfig")
+@Composable
+fun NavRoutes(navController: NavHostController) {
+    NavHost(
+        navController = navController,
+        startDestination = "carselect"
+    ) {
+        composable(
+            "carselect"
+        ) { CarSelectView(navController) }
+
+        composable(
+            "cardetails/{licencePlate}",
+            arguments = listOf(navArgument("licencePlate") {
+                type = NavType.StringType
+            })
+        ) { navBackStackEntry ->
+            CarDetailView(
+                navController,
+                navBackStackEntry.arguments?.getString("licencePlate") ?: ""
+            )
+        }
+
+        composable(
+            "gasdetail"
+        ) { GasDetailView(navRoutes = navController) }
+
+    }
 }

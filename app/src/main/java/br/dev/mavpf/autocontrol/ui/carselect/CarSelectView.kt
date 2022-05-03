@@ -143,7 +143,7 @@ fun MenuOpen(navRoutes: NavHostController){
     }
 
     DropdownMenu(expanded = expanded , onDismissRequest = { expanded = false }, Modifier.width(IntrinsicSize.Max)) {
-        DropdownMenuItem(onClick = { navRoutes.navigate("gasadd") }) {
+        DropdownMenuItem(onClick = { navRoutes.navigate("gasdetail") }) {
             Icon(
                 Icons.Filled.LocalGasStation,
                 null,
