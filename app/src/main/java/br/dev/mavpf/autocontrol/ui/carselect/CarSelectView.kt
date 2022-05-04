@@ -35,7 +35,7 @@ fun CarSelectView(navRoutes: NavHostController) {
     val lazyPagingItems: List<Cars> by carSelectViewModel.getCars().observeAsState(listOf())
     val rememberState = rememberLazyListState()
 
-    val openDialogState = remember { mutableStateOf(false)}
+    var openDialogState by remember { mutableStateOf(false)}
 
     Column {
 
@@ -101,7 +101,7 @@ fun CarSelectView(navRoutes: NavHostController) {
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        openDialogState.value = true
+                        openDialogState = true
                     }
                 ) {
                     Icon(Icons.Filled.Add, null)
@@ -112,9 +112,9 @@ fun CarSelectView(navRoutes: NavHostController) {
         }
     }
 
-    if (openDialogState.value) {
-        Dialog(onDismissRequest = { openDialogState.value = false }) {
-            openDialogState.value = carAddView().value
+    if (openDialogState) {
+        Dialog(onDismissRequest = { openDialogState = false }) {
+            openDialogState = carAddView()
         }
     }
 }

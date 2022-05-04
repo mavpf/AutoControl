@@ -14,6 +14,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -64,7 +65,63 @@ fun GasDetailView(navRoutes: NavHostController){
                 }
             } else {
                 items(items = lazyPagingItems) {
-                    Text(text = it.gasname)
+                    Card(modifier = Modifier
+                        .padding(5.dp)
+                        .fillMaxWidth()
+                        .fillMaxHeight()
+                        .defaultMinSize(minHeight = 60.dp)
+                        ,
+                        elevation = 10.dp,
+                        shape = RoundedCornerShape(2.dp),
+                        onClick = {
+                            //TODO
+                        }
+                    ) {
+                        Column(Modifier.fillMaxHeight()) {
+
+                            Row(
+                                Modifier
+                                    .padding(5.dp)
+                            ) {
+                                Text(
+                                    text = stringResource(id = R.string.gas_type),
+                                    modifier = Modifier.weight(1f),
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.gas_octanes),
+                                    modifier = Modifier.weight(1f),
+                                    fontWeight = FontWeight.Bold
+                                )
+                                Text(
+                                    text = stringResource(id = R.string.gas_obs),
+                                    modifier = Modifier.weight(1f),
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            Row(
+                                Modifier
+                                    .wrapContentSize()
+                                    .fillMaxSize()
+                                    .padding(5.dp)
+                            ) {
+                                Text(
+                                    text = it.gasname,
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Text(
+                                    text = it.octanes.toString(),
+                                    modifier = Modifier.weight(1f)
+                                )
+                                Text(
+                                    text = it.obs,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .wrapContentSize()
+                                )
+                            }
+                        }
+                    }
                 }
             }
         }

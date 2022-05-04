@@ -24,7 +24,7 @@ import br.dev.mavpf.autocontrol.data.room.Cars
 import kotlinx.coroutines.launch
 
 @Composable
-fun carAddView(): MutableState<Boolean> {
+fun carAddView(): Boolean {
 
     val carAddViewModel = hiltViewModel<CarAddViewModel>()
 
@@ -32,7 +32,7 @@ fun carAddView(): MutableState<Boolean> {
     val errorMessage = stringResource(id = R.string.save_error)
     val coroutineScope = rememberCoroutineScope()
     
-    val buttonReturn = remember { mutableStateOf(true) }
+    var buttonReturn by remember { mutableStateOf(true) }
 
     var textMaker by remember { mutableStateOf("") }
     var textModel by remember { mutableStateOf("") }
@@ -80,14 +80,14 @@ fun carAddView(): MutableState<Boolean> {
             )
 
             if (carAddViewModel.insertCar(dataset)) {
-                buttonReturn.value = false
+                buttonReturn = false
             } else {
                 Toast.makeText(
                     context,
                     errorMessage,
                     Toast.LENGTH_LONG
                 ).show()
-                buttonReturn.value = true
+                buttonReturn = true
             }
         } else {
             Toast.makeText(context, R.string.field_error, Toast.LENGTH_SHORT).show()
@@ -211,7 +211,7 @@ fun carAddView(): MutableState<Boolean> {
                 horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 Button(
-                    onClick = { buttonReturn.value = false },
+                    onClick = { buttonReturn = false },
                     modifier = Modifier
                         .weight(1f)
                 ) {

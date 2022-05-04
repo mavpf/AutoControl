@@ -10,16 +10,16 @@
     <string name="save_button">Salvar</string>
     <string name="add_header">Adicionar Carro</string>
     <string name="save_error">Placa em uso</string>
-    <string name="field_error">"Preenhca todos os campos"</string>
+    <string name="field_error">"Preencha todos os campos"</string>
     <string name="menu_gas">Combustíveis</string>
     <string name="menu_service">Serviços</string>
     <string name="gas_add_title">Combustíveis</string>
     <string name="no_gas_type">Nenhum tipo de combustível adicionado</string>
-    <string name="gas_type">Combustivel:</string>
+    <string name="gas_type">Combustível:</string>
     <string name="gas_octanes">Octanas:</string>
-    <string name="gas_obs">Observaçoes:</string>
-    <string name="gas_add_header">Adicionar Combustivel</string>
-    <string name="save_gas_error">Nome do combustivel e obrigatorio</string>
+    <string name="gas_obs">Observações:</string>
+    <string name="gas_add_header">Adicionar Combustível</string>
+    <string name="save_gas_error">Nome do combustível é obrigatório</string>
     <string name="save_gasoctanes_error">Apenas valores numéricos nas octanas</string>
-    <string name="gas_name_used">Nome de combustivel em uso</string>
+    <string name="gas_name_used">Nome de combustível em uso</string>
 </resources>
