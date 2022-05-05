@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class GasAddViewModel @Inject constructor(
+class GasCRUDViewModel @Inject constructor(
     private val databaseDao: CarDatabaseDao
 ): ViewModel() {
     suspend fun insertGas(dataset: GasTypes): Boolean{
@@ -19,6 +19,18 @@ class GasAddViewModel @Inject constructor(
                 true
         } catch (e: SQLiteException) {
             false
+        }
+    }
+
+    fun deleteGas(dataset: GasTypes) {
+        viewModelScope.launch {
+            databaseDao.deleteGasType(dataset)
+        }
+    }
+
+    fun updateGas(dataset: GasTypes){
+        viewModelScope.launch {
+            databaseDao.updateGasType(dataset)
         }
     }
 }

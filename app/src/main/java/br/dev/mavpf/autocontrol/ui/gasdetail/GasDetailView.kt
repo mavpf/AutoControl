@@ -21,7 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import br.dev.mavpf.autocontrol.R
 import br.dev.mavpf.autocontrol.data.room.GasTypes
-import br.dev.mavpf.autocontrol.ui.gasadd.gasAddView
+import br.dev.mavpf.autocontrol.ui.gasadd.gasCRUDView
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
@@ -30,7 +30,9 @@ fun GasDetailView(navRoutes: NavHostController){
     val viewModel = hiltViewModel<GasDetailViewModel>()
     val rememberListState = rememberLazyListState()
     val lazyPagingItems: List<GasTypes> by viewModel.getGas().observeAsState(listOf())
-    var openDialogState by remember { mutableStateOf(false)}
+    var openDialogAddState by remember { mutableStateOf(false)}
+    var openDialogChangeState by remember { mutableStateOf(false)}
+    var gasName by remember { mutableStateOf(GasTypes("",0,""))}
 
     Column() {
 
@@ -53,10 +55,7 @@ fun GasDetailView(navRoutes: NavHostController){
                         .fillMaxWidth()
                         .height(45.dp),
                         elevation = 10.dp,
-                        shape = RoundedCornerShape(2.dp),
-                        onClick = {
-                            //TODO
-                        }
+                        shape = RoundedCornerShape(2.dp)
                     ) {
                         Box(modifier = Modifier.wrapContentSize(Alignment.Center)) {
                             Text(text = stringResource(id = R.string.no_gas_type))
@@ -74,7 +73,8 @@ fun GasDetailView(navRoutes: NavHostController){
                         elevation = 10.dp,
                         shape = RoundedCornerShape(2.dp),
                         onClick = {
-                            //TODO
+                            gasName = GasTypes(it.gasname, it.octanes, it.obs)
+                            openDialogChangeState = true
                         }
                     ) {
                         Column(Modifier.fillMaxHeight()) {
@@ -129,7 +129,7 @@ fun GasDetailView(navRoutes: NavHostController){
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-                        openDialogState = true
+                        openDialogAddState = true
                     }
                 ) {
                     Icon(Icons.Filled.Add, null)
@@ -139,9 +139,15 @@ fun GasDetailView(navRoutes: NavHostController){
 
         }
 
-        if (openDialogState){
-            Dialog(onDismissRequest = { openDialogState = false}) {
-                openDialogState = gasAddView()
+        if (openDialogAddState){
+            Dialog(onDismissRequest = { openDialogAddState = false}) {
+                openDialogAddState = gasCRUDView("insert",gasName)
+            }
+        }
+
+        if (openDialogChangeState){
+            Dialog(onDismissRequest = { openDialogChangeState = false }) {
+                openDialogChangeState = gasCRUDView(crud = "change", gasValue = gasName)
             }
         }
     }

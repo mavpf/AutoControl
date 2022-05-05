@@ -24,3 +24,7 @@ data class GasTypes(
     @ColumnInfo (name = "octanes") val octanes: Int,
     @ColumnInfo (name = "obs") val obs: String
 )
+
+data class GasName(
+    val gasname: String
+)

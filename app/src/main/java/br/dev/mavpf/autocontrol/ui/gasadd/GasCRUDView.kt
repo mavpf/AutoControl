@@ -1,5 +1,6 @@
 package br.dev.mavpf.autocontrol.ui.gasadd
 
+
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -7,14 +8,15 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material.icons.filled.Update
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -25,9 +27,9 @@ import br.dev.mavpf.autocontrol.data.room.GasTypes
 import kotlinx.coroutines.launch
 
 @Composable
-fun gasAddView(): Boolean {
+fun gasCRUDView(crud: String, gasValue: GasTypes): Boolean {
 
-    val viewModel = hiltViewModel<GasAddViewModel>()
+    val viewModel = hiltViewModel<GasCRUDViewModel>()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
@@ -35,9 +37,14 @@ fun gasAddView(): Boolean {
     var gasOctanes by remember { mutableStateOf("") }
     var gasObs by remember { mutableStateOf("") }
 
-    var buttonReturn by remember {mutableStateOf(true)}
+    var buttonReturn by remember { mutableStateOf(true) }
 
-    fun checkValues():Boolean{
+    var firstButton = Icons.Filled.Cancel
+    var firstButtonDesc = stringResource(id = R.string.cancel_button)
+    var secondButton = Icons.Filled.Save
+    var secondButtonDesc = stringResource(id = R.string.save_button)
+
+    fun checkValues(): Boolean {
         return when {
             gasName.isBlank() -> {
                 Toast.makeText(context, R.string.save_gas_error, Toast.LENGTH_SHORT).show()
@@ -53,25 +60,78 @@ fun gasAddView(): Boolean {
         }
     }
 
-    suspend fun addValues(){
+    suspend fun crudValues(crudOp: String) {
         if (checkValues()) {
             val dataset = GasTypes(
                 gasName,
                 gasOctanes.toInt(),
                 gasObs
             )
+            when (crudOp) {
+                "insert" -> {
+                    buttonReturn = if (viewModel.insertGas(dataset)) {
+                        false
+                    } else {
+                        Toast.makeText(
+                            context,
+                            R.string.gas_name_used,
+                            Toast.LENGTH_LONG
+                        ).show()
+                        true
+                    }
+                }
+                "update" -> {
+                    viewModel.updateGas( GasTypes(
+                        gasName,
+                    gasOctanes.toInt(),
+                        gasObs
+                    ))
+                    buttonReturn = false
+                }
+                "delete" -> {
+                    viewModel.deleteGas(gasValue)
+                    buttonReturn = false
+                }
+            }
+        } else {
+            Toast.makeText(context, "Erro desconhecido", Toast.LENGTH_SHORT).show()
+        }
+    }
 
-            if (viewModel.insertGas(dataset)) {
-                buttonReturn = false
-            } else {
-                Toast.makeText(
-                    context,
-                    R.string.gas_name_used,
-                    Toast.LENGTH_LONG
-                ).show()
-                buttonReturn = true
+    fun selectGasDetails() {
+        gasName = gasValue.gasname
+        gasOctanes = gasValue.octanes.toString()
+        gasObs = gasValue.obs
+    }
+
+    fun firstButtonFunction() {
+        if (crud == "insert") {
+            buttonReturn = false
+        } else {
+            coroutineScope.launch {
+                crudValues("update")
             }
         }
+    }
+
+    fun secondButtonFunction() {
+        if (crud == "insert") {
+            coroutineScope.launch {
+                crudValues(crud)
+            }
+        } else {
+            coroutineScope.launch {
+                crudValues("delete")
+            }
+        }
+    }
+
+    if (crud != "insert") {
+        firstButton = Icons.Filled.Update
+        firstButtonDesc = stringResource(id = R.string.update_button)
+        secondButton = Icons.Filled.Delete
+        secondButtonDesc = stringResource(id = R.string.delete_button)
+        selectGasDetails()
     }
 
     Card(
@@ -79,8 +139,10 @@ fun gasAddView(): Boolean {
             .fillMaxWidth(1f)
             .fillMaxHeight(.65f)
     ) {
-        Column(modifier = Modifier
-            .padding(5.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(5.dp)
+        ) {
 
             Row(
                 modifier = Modifier
@@ -116,53 +178,58 @@ fun gasAddView(): Boolean {
                         else -> it
                     }
                 },
-                label = { Text(stringResource(id = R.string.gas_octanes))
+                label = {
+                    Text(stringResource(id = R.string.gas_octanes))
                 }
             )
 
             OutlinedTextField(
                 value = gasObs,
                 onValueChange = { gasObs = it },
-                label = { Text(text = stringResource(id = R.string.gas_obs)) })
-            Row(modifier = Modifier
-                .padding(15.dp),
-                horizontalArrangement = Arrangement.spacedBy(15.dp)) {
+                label = { Text(text = stringResource(id = R.string.gas_obs)) }
+            )
+
+            Row(
+                modifier = Modifier
+                    .padding(15.dp),
+                horizontalArrangement = Arrangement.spacedBy(15.dp)
+            ) {
                 Button(
-                    onClick = { buttonReturn = false },
+                    onClick = { firstButtonFunction() },
                     modifier = Modifier
                         .weight(1f)
                 ) {
                     Icon(
-                        Icons.Filled.Cancel,
-                        contentDescription = stringResource(id = R.string.cancel_button),
+                        firstButton,
+                        contentDescription = firstButtonDesc,
                         modifier = Modifier
                             .size(ButtonDefaults.IconSize)
                     )
                     Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = stringResource(id = R.string.cancel_button))
+                    Text(text = firstButtonDesc)
                 }
 
                 Button(
                     onClick = {
-                        coroutineScope.launch {
-                                  addValues()
-                              }
+                        secondButtonFunction()
                     },
                     modifier = Modifier
                         .weight(1f)
                 ) {
                     Icon(
-                        Icons.Filled.Save,
-                        contentDescription = stringResource(id = R.string.save_button),
+                        secondButton,
+                        contentDescription = secondButtonDesc,
                         modifier = Modifier
                             .size(ButtonDefaults.IconSize)
                     )
                     Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-                    Text(text = stringResource(id = R.string.save_button))
+                    Text(text = secondButtonDesc)
                 }
             }
         }
-
     }
+
+
+
     return buttonReturn
 }
