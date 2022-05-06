@@ -24,4 +24,5 @@
     <string name="gas_name_used">Nome de combustível em uso</string>
     <string name="update_button">Atualizar</string>
     <string name="delete_button">Apagar</string>
+    <string name="consuption_header">Consumo:</string>
 </resources>
