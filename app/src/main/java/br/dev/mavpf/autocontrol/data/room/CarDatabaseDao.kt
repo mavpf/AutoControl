@@ -29,4 +29,7 @@ interface CarDatabaseDao {
 
     @Update (entity = GasTypes::class)
     suspend fun updateGasType(vararg: GasTypes)
+
+    @Query("select model from cars where licenceplate = :licencePlate")
+    fun selectCar(licencePlate: String): LiveData<String>
 }
