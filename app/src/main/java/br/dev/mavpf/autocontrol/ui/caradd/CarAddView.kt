@@ -79,15 +79,15 @@ fun carAddView(): Boolean {
                 textMileage.toInt()
             )
 
-            if (carAddViewModel.insertCar(dataset)) {
-                buttonReturn = false
+            buttonReturn = if (carAddViewModel.insertCar(dataset)) {
+                false
             } else {
                 Toast.makeText(
                     context,
                     errorMessage,
                     Toast.LENGTH_LONG
                 ).show()
-                buttonReturn = true
+                true
             }
         } else {
             Toast.makeText(context, R.string.field_error, Toast.LENGTH_SHORT).show()
