@@ -7,14 +7,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
+import androidx.compose.ui.layout.HorizontalAlignmentLine
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,9 +33,9 @@ fun CarDetailView(navRoutes: NavHostController, licencePlate: String) {
         listOf("Diesel", 75)
     )
     val datasetCost = listOf(
-        listOf("Combustível", 700),
-        listOf("Seguro", 1200),
-        listOf("Serviços", 2000)
+        listOf("Combustível", 700.00),
+        listOf("Seguro", 2300.00),
+        listOf("Serviços", 2000.00)
     )
     val model: String by viewModel.selectCar(licencePlate).observeAsState(String())
 
@@ -50,7 +51,7 @@ fun CarDetailView(navRoutes: NavHostController, licencePlate: String) {
         )
 
         CardConsumption(dataset)
-        CardTotalCosts(costsDataset = datasetCost)
+        CardTotalCosts(datasetCost, viewModel)
 
     }
 
@@ -114,7 +115,8 @@ fun CardConsumption(consumptionDataset: List<List<Any>>) {
 }
 
 @Composable
-fun CardTotalCosts(costsDataset: List<List<Any>>){
+fun CardTotalCosts(costsDataset: List<List<Any>>, viewModel: CarDetailViewModel){
+
     Card(
         modifier = Modifier
             .padding(5.dp)
@@ -133,6 +135,7 @@ fun CardTotalCosts(costsDataset: List<List<Any>>){
 
 
                 LazyColumn {
+                    var tempCost = 0.00
                     items(costsDataset) { index ->
                         ConstraintLayout(
                             modifier = Modifier
@@ -140,6 +143,7 @@ fun CardTotalCosts(costsDataset: List<List<Any>>){
                                 .padding(5.dp)
                         ) {
                             val (text1, text2) = createRefs()
+
                             Text(text = index[0].toString(),
                                 modifier = Modifier
                                     .constrainAs(text1) {
@@ -152,10 +156,21 @@ fun CardTotalCosts(costsDataset: List<List<Any>>){
                                         end.linkTo(parent.end)
                                         top.linkTo(parent.top)
                                     })
+                            tempCost = tempCost.plus(index[1] as Double)
                         }
+                        viewModel.totalCost = tempCost
                     }
                 }
             }
+            Row() {
+                Text(text = stringResource(id = R.string.total_cost_footer), Modifier.padding(top = 10.dp))
+                Text(text = viewModel.totalCost.toString(),
+                    Modifier
+                        .padding(top = 10.dp)
+                        .fillMaxWidth(),
+                    textAlign = TextAlign.End)
+            }
+
         }
     }
 }

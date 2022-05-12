@@ -26,4 +26,5 @@
     <string name="delete_button">Apagar</string>
     <string name="consuption_header">Consumo:</string>
     <string name="total_cost_header">Custos:</string>
+    <string name="total_cost_footer">Total Geral:</string>
 </resources>
