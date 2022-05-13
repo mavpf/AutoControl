@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Cars::class, GasTypes::class],
+    entities = [Cars::class, FuelTypes::class],
     version = 1,
     exportSchema = false
 )

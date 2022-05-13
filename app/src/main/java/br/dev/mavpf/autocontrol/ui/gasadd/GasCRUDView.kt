@@ -23,19 +23,21 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.dev.mavpf.autocontrol.R
-import br.dev.mavpf.autocontrol.data.room.GasTypes
+import br.dev.mavpf.autocontrol.data.room.FuelTypes
 import kotlinx.coroutines.launch
 
 @Composable
-fun gasCRUDView(crud: String, gasValue: GasTypes): Boolean {
+fun gasCRUDView(crud: String, gasValue: FuelTypes): Boolean {
 
     val viewModel = hiltViewModel<GasCRUDViewModel>()
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
 
-    var gasName by remember { mutableStateOf("") }
-    var gasOctanes by remember { mutableStateOf("") }
-    var gasObs by remember { mutableStateOf("") }
+    var fuelName by remember { mutableStateOf("") }
+    var fuelOctanes by remember { mutableStateOf("") }
+    var fuelObs by remember { mutableStateOf("") }
+
+    var dataset by remember { mutableStateOf(FuelTypes("",0,""))}
 
     var buttonReturn by remember { mutableStateOf(true) }
 
@@ -46,62 +48,75 @@ fun gasCRUDView(crud: String, gasValue: GasTypes): Boolean {
 
     fun checkValues(): Boolean {
         return when {
-            gasName.isBlank() -> {
+            fuelName.isBlank() -> {
                 Toast.makeText(context, R.string.save_gas_error, Toast.LENGTH_SHORT).show()
                 false
             }
-            gasOctanes.toIntOrNull()?.let { false } ?: true -> {
+            fuelOctanes.toIntOrNull()?.let { false } ?: true -> {
                 Toast.makeText(context, R.string.save_gasoctanes_error, Toast.LENGTH_SHORT).show()
                 false
             }
             else -> {
+                dataset = FuelTypes(
+                    fuelName,
+                    fuelOctanes.toInt(),
+                    fuelObs
+                )
                 true
             }
         }
     }
 
-    suspend fun crudValues(crudOp: String) {
-        if (checkValues()) {
-            val dataset = GasTypes(
-                gasName,
-                gasOctanes.toInt(),
-                gasObs
-            )
-            when (crudOp) {
-                "insert" -> {
-                    buttonReturn = if (viewModel.insertGas(dataset)) {
-                        false
-                    } else {
-                        Toast.makeText(
-                            context,
-                            R.string.gas_name_used,
-                            Toast.LENGTH_LONG
-                        ).show()
-                        true
-                    }
-                }
-                "update" -> {
-                    viewModel.updateGas( GasTypes(
-                        gasName,
-                    gasOctanes.toInt(),
-                        gasObs
-                    ))
-                    buttonReturn = false
-                }
-                "delete" -> {
-                    viewModel.deleteGas(gasValue)
-                    buttonReturn = false
-                }
+    suspend fun addValues(){
+        if (checkValues()){
+            buttonReturn = if (viewModel.insertGas(dataset)) {
+                false
+            } else {
+                Toast.makeText(
+                    context,
+                    R.string.gas_name_used,
+                    Toast.LENGTH_LONG
+                ).show()
+                true
             }
-        } else {
-            Toast.makeText(context, "Erro desconhecido", Toast.LENGTH_SHORT).show()
         }
     }
 
+    suspend fun deleteValues(){
+        if (checkValues()){
+            buttonReturn = if(viewModel.deleteGas(dataset)) {
+                false
+            } else{
+                Toast.makeText(
+                    context,
+                    R.string.unknow_error,
+                    Toast.LENGTH_LONG
+                ).show()
+                true
+            }
+        }
+    }
+
+    suspend fun updateValues(){
+        if (checkValues()){
+            buttonReturn = if(viewModel.updateGas(dataset)){
+                false
+            } else {
+                Toast.makeText(
+                    context,
+                    R.string.unknow_error,
+                    Toast.LENGTH_LONG
+                ).show()
+                true
+            }
+        }
+    }
+
+
     fun selectGasDetails() {
-        gasName = gasValue.gasname
-        gasOctanes = gasValue.octanes.toString()
-        gasObs = gasValue.obs
+        fuelName = gasValue.fuelname
+        fuelOctanes = gasValue.octanes.toString()
+        fuelObs = gasValue.obs
     }
 
     fun firstButtonFunction() {
@@ -109,7 +124,7 @@ fun gasCRUDView(crud: String, gasValue: GasTypes): Boolean {
             buttonReturn = false
         } else {
             coroutineScope.launch {
-                crudValues("update")
+                updateValues()
             }
         }
     }
@@ -117,11 +132,11 @@ fun gasCRUDView(crud: String, gasValue: GasTypes): Boolean {
     fun secondButtonFunction() {
         if (crud == "insert") {
             coroutineScope.launch {
-                crudValues(crud)
+                addValues()
             }
         } else {
             coroutineScope.launch {
-                crudValues("delete")
+                deleteValues()
             }
         }
     }
@@ -164,17 +179,17 @@ fun gasCRUDView(crud: String, gasValue: GasTypes): Boolean {
             }
 
             OutlinedTextField(
-                value = gasName,
-                onValueChange = { gasName = it },
+                value = fuelName,
+                onValueChange = { fuelName = it },
                 label = { Text(stringResource(R.string.gas_type)) },
             )
 
             OutlinedTextField(
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                value = gasOctanes,
+                value = fuelOctanes,
                 onValueChange = {
-                    gasOctanes = when (it.toIntOrNull()) {
-                        null -> gasOctanes
+                    fuelOctanes = when (it.toIntOrNull()) {
+                        null -> fuelOctanes
                         else -> it
                     }
                 },
@@ -184,8 +199,8 @@ fun gasCRUDView(crud: String, gasValue: GasTypes): Boolean {
             )
 
             OutlinedTextField(
-                value = gasObs,
-                onValueChange = { gasObs = it },
+                value = fuelObs,
+                onValueChange = { fuelObs = it },
                 label = { Text(text = stringResource(id = R.string.gas_obs)) }
             )
 

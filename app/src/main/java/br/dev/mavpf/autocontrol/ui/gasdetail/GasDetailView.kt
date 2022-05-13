@@ -20,7 +20,7 @@ import androidx.compose.ui.window.Dialog
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import br.dev.mavpf.autocontrol.R
-import br.dev.mavpf.autocontrol.data.room.GasTypes
+import br.dev.mavpf.autocontrol.data.room.FuelTypes
 import br.dev.mavpf.autocontrol.ui.gasadd.gasCRUDView
 
 @OptIn(ExperimentalMaterialApi::class)
@@ -29,12 +29,12 @@ fun GasDetailView(navRoutes: NavHostController){
     
     val viewModel = hiltViewModel<GasDetailViewModel>()
     val rememberListState = rememberLazyListState()
-    val lazyPagingItems: List<GasTypes> by viewModel.getGas().observeAsState(listOf())
+    val lazyPagingItems: List<FuelTypes> by viewModel.getGas().observeAsState(listOf())
     var openDialogAddState by remember { mutableStateOf(false)}
     var openDialogChangeState by remember { mutableStateOf(false)}
-    var gasName by remember { mutableStateOf(GasTypes("",0,""))}
+    var gasName by remember { mutableStateOf(FuelTypes("",0,""))}
 
-    Column() {
+    Column {
 
         TopAppBar(
             title = { Text(text = stringResource(id = R.string.menu_gas)) },
@@ -73,7 +73,7 @@ fun GasDetailView(navRoutes: NavHostController){
                         elevation = 10.dp,
                         shape = RoundedCornerShape(2.dp),
                         onClick = {
-                            gasName = GasTypes(it.gasname, it.octanes, it.obs)
+                            gasName = FuelTypes(it.fuelname, it.octanes, it.obs)
                             openDialogChangeState = true
                         }
                     ) {
@@ -106,7 +106,7 @@ fun GasDetailView(navRoutes: NavHostController){
                                     .padding(5.dp)
                             ) {
                                 Text(
-                                    text = it.gasname,
+                                    text = it.fuelname,
                                     modifier = Modifier.weight(1f)
                                 )
                                 Text(

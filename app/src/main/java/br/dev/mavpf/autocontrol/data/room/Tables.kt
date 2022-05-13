@@ -17,14 +17,11 @@ data class Cars(
 )
 
 @Entity(
-    tableName = "gastypes"
+    tableName = "fueltypes"
 )
-data class GasTypes(
-    @ColumnInfo (name = "gasname") @PrimaryKey val gasname: String,
+data class FuelTypes(
+    @ColumnInfo (name = "fuelname") @PrimaryKey val fuelname: String,
     @ColumnInfo (name = "octanes") val octanes: Int,
     @ColumnInfo (name = "obs") val obs: String
 )
 
-data class GasName(
-    val gasname: String
-)

@@ -24,7 +24,8 @@
     <string name="gas_name_used">Nome de combustível em uso</string>
     <string name="update_button">Atualizar</string>
     <string name="delete_button">Apagar</string>
-    <string name="consuption_header">Consumo:</string>
+    <string name="consuption_header">Consumo médio:</string>
     <string name="total_cost_header">Custos:</string>
     <string name="total_cost_footer">Total Geral:</string>
+    <string name="unknow_error">Erro desconhecido</string>
 </resources>
