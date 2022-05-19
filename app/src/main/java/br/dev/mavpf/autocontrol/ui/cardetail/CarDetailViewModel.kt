@@ -28,6 +28,10 @@ class CarDetailViewModel @Inject constructor(
     val datasetCost = listOf(
         CostType("Combustível", 700.00),
         CostType("Seguro", 2300.00),
+        CostType("Serviços", 2000.00),
+        CostType("Serviços", 2000.00),
+        CostType("Serviços", 2000.00),
+        CostType("Serviços", 2000.00),
         CostType("Serviços", 2000.00)
     )
 

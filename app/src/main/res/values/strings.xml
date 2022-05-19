@@ -26,6 +26,8 @@
     <string name="delete_button">Apagar</string>
     <string name="consuption_header">Consumo médio:</string>
     <string name="total_cost_header">Custos:</string>
-    <string name="total_cost_footer">Total Geral:</string>
+    <string name="total_cost_footer">Custos Totais:</string>
     <string name="unknow_error">Erro desconhecido</string>
+    <string name="gas_add_icon">Combustível</string>
+    <string name="service_add_icon">Serviços</string>
 </resources>
